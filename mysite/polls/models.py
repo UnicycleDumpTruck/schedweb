@@ -24,9 +24,21 @@ class Choice(models.Model):
         return self.choice_text
 
 
-# class Place(models.Model):
-#     short_name = models.CharField(max_length=40)
-#     long_name = models.CharField(max_length=100)
+class Exhibit(models.Model):
+    short_name = models.CharField(max_length=40)
+    long_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.long_name
+
+
+# class Day(models.Model):
+#     order = models.IntegerField()
+#     abbreviation = models.CharField(max_length=3)
+#     name = models.CharField(max_length=10)
+
+#     def __str__(self):
+#         return self.name
 
 
 class Task_Type(models.Model):
@@ -40,12 +52,36 @@ class Task_Type(models.Model):
 
 
 class Task(models.Model):
+    days = [
+        ("mon", "Monday"),
+        ("tue", "Tuesday"),
+        ("wed", "Wednesday"),
+        ("thu", "Thursday"),
+        ("fri", "Friday"),
+        ("sat", "Saturday"),
+        ("sun", "Sunday"),
+    ]
     task_type = models.ForeignKey(Task_Type, on_delete=models.CASCADE)
     location = models.CharField(max_length=100, null=True, blank=True)
-    # location = models.ForeignKey(Task_Type, on_delete=models.CASCADE, null=True)
-    start_time = models.CharField(max_length=5)
-    end_time = models.CharField(max_length=5)
-    weekday = models.CharField(max_length=10)
+    exhibit = models.ForeignKey(
+        Exhibit, on_delete=models.CASCADE, null=True, blank=True
+    )
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    weekday = models.CharField(max_length=10, choices=days, default="Monday")
+    start_date = None
+    end_date = None
+    # start_date = models.DateTimeField(default=datetime.datetime.today())
+    # end_date = models.DateTimeField(default=datetime.datetime.today())
+
+    # breakfast_start_time = models.TimeField(default=time(7, 30))
+
+    # def save(self, *args, **kwargs):
+    #     self.start_date = datetime.datetime.combine(
+    #         datetime.date(1, 1, 1), self.start_time
+    #     )
+    #     self.end_date = datetime.datetime.combine(datetime.date(1, 1, 1), self.end_time)
+    #     super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.task_type} {self.weekday} {self.start_time}-{self.end_time}"
+        return f"{self.location} {self.task_type} {self.weekday} {self.start_time.strftime('%H:%M')}-{self.end_time.strftime('%H:%M')}"
