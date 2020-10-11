@@ -1,13 +1,13 @@
-import pandas as pd
+# import pandas as pd
 import openpyxl
 
 DAY_ROWS = [
-    (15, 20),  # Monday
-    (24, 28),  # Tuesday
-    (32, 39),  # Wednesday
-    (43, 50),  # Thursday
-    (54, 61),  # Friday
-    (66, 73),  # Weekend: Saturday & Sunday
+    (15, 20, "Monday"),  # Monday
+    (24, 28, "Tuesday"),  # Tuesday
+    (32, 39, "Wednesday"),  # Wednesday
+    (43, 50, "Thursday"),  # Thursday
+    (54, 61, "Friday"),  # Friday
+    (66, 73, "Weekend"),  # Weekend: Saturday & Sunday
 ]
 
 
@@ -18,66 +18,32 @@ def merged_size(cell, sheet):
             return rng.size
 
 
-# def getValueWithMergeLookup(sheet, cell):
-#     idx = cell.coordinate
-#     for range_ in sheet.merged_cell_ranges:
-#         merged_cells = list(openpyxl.utils.rows_from_range(range_))
-#         for row in merged_cells:
-#             if idx in row:
-#                 # If this is a merged cell,
-#                 # return  the first cell of the merge range
-#                 return sheet.cell(merged_cells[0][0]).value
-
-#     return sheet.cell(idx).value
-
-
 filename = "schedule.xlsm"
-# df = pd.read_excel(
-#     filename, sheet_name="Schedule", header=0, skiprows=13, usecols="A:AJ"
-# )
-# for col in df.columns:
-#     print(col)
-# print(df)
-
 wb = openpyxl.load_workbook(filename)
-sheet = wb["Schedule"]  # ["A13:AJ73"]
+sheet = wb["Schedule"]
 
-cell = sheet.cell(row=18, column=4)
+# row 14 is the first row of time headers, col B to AL
 
-
-# print(type(cell).__name__)
-# print(cell.coordinate)
-# print(cell.row)
-# print(cell.column)
-# print(cell.comment)
-# print(cell.data_type)
-# print(cell.parent)
-# print(cell.value)
-
-# print(sheet.merged_cells)
-
-# for rng in sheet.merged_cells.ranges:
-#     print(rng.left, rng.size)
-
-print(merged_size(cell, sheet))
-# print(sheet["A13":"AJ73"])
-
-# row 14 is the first row of time headers
-
-for row in sheet["B13":"AJ73"]:
-    for cl in row:
-        if cl.value:
-            location = sheet.cell(row=cl.row, column=1).value
-            start = sheet.cell(row=14, column=cl.column).value
-            mrg = merged_size(cl, sheet)
-            if mrg:
-                end = sheet.cell(row=14, column=cl.column + mrg["columns"]).value
-            else:
-                end = sheet.cell(row=14, column=cl.column + 1).value
-            task = cl.value
-            print(
-                location,
-                start,
-                end,
-                task,
-            )
+for day in DAY_ROWS:
+    print("=" * 80)
+    rng_start = "B" + str(day[0])
+    rng_end = "AJ" + str(day[1])
+    for row in sheet[rng_start:rng_end]:
+        for cl in row:
+            if cl.value:
+                weekday = day[2]
+                location = sheet.cell(row=cl.row, column=1).value
+                start = sheet.cell(row=14, column=cl.column).value
+                mrg = merged_size(cl, sheet)
+                if mrg:
+                    end = sheet.cell(row=14, column=cl.column + mrg["columns"]).value
+                else:
+                    end = sheet.cell(row=14, column=cl.column + 1).value
+                task = cl.value
+                print(
+                    weekday,
+                    location,
+                    start,
+                    end,
+                    task,
+                )
