@@ -1,3 +1,5 @@
+import csv
+
 # import pandas as pd
 import openpyxl
 
@@ -21,29 +23,32 @@ def merged_size(cell, sheet):
 filename = "schedule.xlsm"
 wb = openpyxl.load_workbook(filename)
 sheet = wb["Schedule"]
-
 # row 14 is the first row of time headers, col B to AL
 
-for day in DAY_ROWS:
-    print("=" * 80)
-    rng_start = "B" + str(day[0])
-    rng_end = "AJ" + str(day[1])
-    for row in sheet[rng_start:rng_end]:
-        for cl in row:
-            if cl.value:
-                weekday = day[2]
-                location = sheet.cell(row=cl.row, column=1).value
-                start = sheet.cell(row=14, column=cl.column).value
-                mrg = merged_size(cl, sheet)
-                if mrg:
-                    end = sheet.cell(row=14, column=cl.column + mrg["columns"]).value
-                else:
-                    end = sheet.cell(row=14, column=cl.column + 1).value
-                task = cl.value
-                print(
-                    weekday,
-                    location,
-                    start,
-                    end,
-                    task,
-                )
+with open("tasks.csv", mode="w") as output_file:
+    output_writer = csv.writer(
+        output_file, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
+    )
+    output_writer.writerow(
+        ["weekday", "location", "start_time", "end_time", "task_txt"]
+    )
+    for day in DAY_ROWS:
+        print("=" * 80)
+        rng_start = "B" + str(day[0])
+        rng_end = "AJ" + str(day[1])
+        for row in sheet[rng_start:rng_end]:
+            for cl in row:
+                if cl.value:
+                    weekday = day[2]
+                    location = sheet.cell(row=cl.row, column=1).value
+                    start = sheet.cell(row=14, column=cl.column).value
+                    mrg = merged_size(cl, sheet)
+                    if mrg:
+                        end = sheet.cell(
+                            row=14, column=cl.column + mrg["columns"]
+                        ).value
+                    else:
+                        end = sheet.cell(row=14, column=cl.column + 1).value
+                    task = cl.value
+                    output_writer.writerow([weekday, location, start, end, task])
+                    print(weekday, location, start, end, task)
