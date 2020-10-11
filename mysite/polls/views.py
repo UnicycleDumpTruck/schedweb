@@ -58,6 +58,7 @@ def tasks(request):
         "task_type__long_name",
         "weekday",
         "exhibit",
+        "exhibit__long_name",
     )
 
     # for row in q:
@@ -86,7 +87,7 @@ def tasks(request):
         + " to "
         + df["end_string"]
         + "<br>"
-        + df["exhibit"]
+        + df["exhibit__long_name"]
         + "<br>"
         + df["task_type__long_name"]
     )
@@ -100,7 +101,7 @@ def tasks(request):
             df,
             x_start="start_date",  # StartDate
             x_end="end_date",  # EndDate
-            y="location",
+            y="exhibit__long_name",
             color="task_type__chart_color",
             text="caption",
         )
