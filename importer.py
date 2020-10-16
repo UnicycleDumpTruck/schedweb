@@ -30,7 +30,7 @@ with open("tasks.csv", mode="w") as output_file:
         output_file, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
     )
     output_writer.writerow(
-        ["weekday", "location", "start_time", "end_time", "task_txt"]
+        ["weekday", "location", "start_time", "end_time", "task_text", "id"]
     )
     for day in DAY_ROWS:
         print("=" * 80)
@@ -50,5 +50,8 @@ with open("tasks.csv", mode="w") as output_file:
                     else:
                         end = sheet.cell(row=14, column=cl.column + 1).value
                     task = cl.value
-                    output_writer.writerow([weekday, location, start, end, task])
+                    id_placeholder = ""
+                    output_writer.writerow(
+                        [weekday, location, start, end, task, id_placeholder]
+                    )
                     print(weekday, location, start, end, task)
