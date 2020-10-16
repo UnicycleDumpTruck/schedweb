@@ -53,15 +53,18 @@ class Task_Type(models.Model):
 
 class Task(models.Model):
     days = [
-        ("mon", "Monday"),
-        ("tue", "Tuesday"),
-        ("wed", "Wednesday"),
-        ("thu", "Thursday"),
-        ("fri", "Friday"),
-        ("sat", "Saturday"),
-        ("sun", "Sunday"),
+        ("Monday", "Monday"),
+        ("Tuesday", "Tuesday"),
+        ("Wednesday", "Wednesday"),
+        ("Thursday", "Thursday"),
+        ("Friday", "Friday"),
+        ("Saturday", "Saturday"),
+        ("Sunday", "Sunday"),
     ]
-    task_type = models.ForeignKey(Task_Type, on_delete=models.CASCADE)
+    task_type = models.ForeignKey(
+        Task_Type, on_delete=models.CASCADE, null=True, blank=True
+    )
+    task_text = models.CharField(max_length=100, null=True, blank=True)
     location = models.CharField(max_length=100, null=True, blank=True)
     exhibit = models.ForeignKey(
         Exhibit, on_delete=models.CASCADE, null=True, blank=True
@@ -71,17 +74,6 @@ class Task(models.Model):
     weekday = models.CharField(max_length=10, choices=days, default="Monday")
     start_date = None
     end_date = None
-    # start_date = models.DateTimeField(default=datetime.datetime.today())
-    # end_date = models.DateTimeField(default=datetime.datetime.today())
-
-    # breakfast_start_time = models.TimeField(default=time(7, 30))
-
-    # def save(self, *args, **kwargs):
-    #     self.start_date = datetime.datetime.combine(
-    #         datetime.date(1, 1, 1), self.start_time
-    #     )
-    #     self.end_date = datetime.datetime.combine(datetime.date(1, 1, 1), self.end_time)
-    #     super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.location} {self.task_type} {self.weekday} {self.start_time.strftime('%H:%M')}-{self.end_time.strftime('%H:%M')}"
+        return f"{self.location} {self.task_text} {self.weekday} {self.start_time.strftime('%H:%M')}-{self.end_time.strftime('%H:%M')}"

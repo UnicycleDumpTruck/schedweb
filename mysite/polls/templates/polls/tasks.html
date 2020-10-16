@@ -8,7 +8,7 @@
     {% if task_list %}
     <ul>
       {% for t in task_list %}
-      <li><a href="/polls/{{ t.id }}/">{{ t.task_type.long_name }}</a></li>
+      <li><a href="/polls/{{ t.id }}/">{{ t.location }}</a></li>
       {% endfor %}
     </ul>
     {% else %}

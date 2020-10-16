@@ -13,4 +13,6 @@ urlpatterns = [
     path("<int:question_id>/vote/", views.vote, name="vote"),
     # ex: /polls/tasks/
     path("tasks/", views.tasks, name="tasks"),
+    # path("wednesday/", views.wed, name="wednesday"),
+    path("grid/", views.grid, name="grid"),
 ]
