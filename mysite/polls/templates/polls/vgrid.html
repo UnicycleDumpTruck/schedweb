@@ -7,7 +7,7 @@
       .schedule {
         display: grid;
         grid-template-columns: 50px repeat(5, 1fr);
-        grid-template-rows: repeat({{num_rows}}, 5em);
+        grid-template-rows: repeat({{num_rows}}, 3em);
         background-color: grey;
         width: 100%;
       }
@@ -24,9 +24,13 @@
       .wipe_down {
         background-color: #fc981e;
       }
+      .unknown {
+        background-color: #ff0000;
+      }
+
       .item {
         /*background-color: #1eaafc;*/
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.19),
           0 6px 6px rgba(0, 0, 0, 0.23);
         color: #ffffff;
         border-radius: 4px;
@@ -78,10 +82,11 @@
       </div>
       {% endfor %} {% if events %} {% for ev in events %}
       <div
-        class="item"
+        class="item {{ ev.class }}"
         style="grid-row: {{ ev.start_row }} / {{ ev.end_row }}; grid-column-start: {{ ev.row }};"
       >
-        {{ ev.location }}<br />{{ev.task_text}}
+        {{ ev.location }}<br />{{ev.task_text}}<br />
+        {{ev.start_string}} to {{ev.end_string}}
       </div>
       {% endfor %}
     </div>

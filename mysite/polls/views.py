@@ -77,6 +77,7 @@ def prep_df(day_of_week):
         + "<br>"
         + df["task_text"].replace("Disinfect & Prop Swap", "Disinfect<br>& Prop Swap")
     )
+    df["class"] = df.task_text.apply(lambda r: task_classes.get(r, "unknown"))
     return df
 
 
