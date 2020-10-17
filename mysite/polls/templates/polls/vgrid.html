@@ -5,8 +5,8 @@
     <title>Vertical Grid</title>
     <style>
       .schedule {
-        display: grid;
-        grid-template-columns: 50px repeat(5, 1fr);
+        display: inline-grid; /* was grid */
+        grid-template-columns: 40px repeat(3, 1fr);
         grid-template-rows: repeat({{num_rows}}, 3em);
         background-color: grey;
         width: 100%;
@@ -14,18 +14,23 @@
 
       .learn_and_play {
         background-color: #1eaafc;
+        font-size: 3.5vh;
       }
       .spray_and_swap {
         background-color: #ff13c0;
+        font-size: 2.5vw;
       }
       .prop_swap {
         background-color: #3cfc1e;
+        font-size: 1.2vh;
       }
       .wipe_down {
         background-color: #fc981e;
+        font-size: 2.2vh;
       }
       .unknown {
         background-color: #ff0000;
+        font-size: 2.5vh;
       }
 
       .item {
@@ -35,21 +40,22 @@
         color: #ffffff;
         border-radius: 4px;
         border: 2px solid #171717;
-        display: grid;
+        display: block;
         justify-content: center;
         align-items: center;
-        font-size: 10px;
+        /*white-space: nowrap;*/
         font-weight: bold;
         padding: 3px;
         /*text-overflow: ellipsis;
         overflow: hidden;*/
       }
 
-      .etitle {
-        font-size: 10px;
+      .event_location {
+        text-decoration: underline;
+        /*font-size: 10px;*/
       }
 
-      .evdesc {
+      .event_task {
         border: 2px;
         border-color: black;
       }
@@ -65,7 +71,7 @@
 
       body {
         background-color: #3b404e;
-        display: flex;
+        /*display: flex;*/
         justify-content: center;
         padding: 20px;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -85,8 +91,9 @@
         class="item {{ ev.class }}"
         style="grid-row: {{ ev.start_row }} / {{ ev.end_row }}; grid-column-start: {{ ev.row }};"
       >
-        {{ ev.location }}<br />{{ev.task_text}}<br />
-        {{ev.start_string}} to {{ev.end_string}}
+        <span class="event_location">{{ ev.location }}:</span><br />
+        <span class="event_task">{{ev.task_text}}</span><br />
+        <span class="event_time">{{ev.start_string}} to {{ev.end_string}}</span>
       </div>
       {% endfor %}
     </div>

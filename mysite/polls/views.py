@@ -183,8 +183,8 @@ task_rows = {
     "Learn & Play": 2,
     "Disinfect & Prop Swap": 3,
     "Wipe down": 4,
-    "Prop Swap": 5,
-    "Prop Swap Only": 5,
+    "Prop Swap": 3,
+    "Prop Swap Only": 3,
 }
 
 
