@@ -4,28 +4,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Vertical Grid</title>
     <style>
+      .page_title {
+        color: #f29e4c;
+        font-size: 60px;
+        justify-content: center;
+        align-items: center;
+      }
+
       .schedule {
-        display: inline-grid; /* was grid */
+        display: grid; /* was grid */
         grid-template-columns: 40px repeat(3, 1fr);
         grid-template-rows: repeat({{num_rows}}, 3em);
+        grid-gap: 5px;
         background-color: grey;
         width: 100%;
       }
 
       .learn_and_play {
-        background-color: #1eaafc;
+        background-color: #772d8b;
         font-size: 3.5vh;
       }
       .spray_and_swap {
-        background-color: #ff13c0;
+        background-color: #d138bf;
         font-size: 2.5vw;
       }
       .prop_swap {
-        background-color: #3cfc1e;
-        font-size: 1.2vh;
+        background-color: #35ff69;
+        font-size: 1.3vh;
       }
       .wipe_down {
-        background-color: #fc981e;
+        background-color: #7494ea;
         font-size: 2.2vh;
       }
       .unknown {
@@ -33,8 +41,13 @@
         font-size: 2.5vh;
       }
 
+      .hour {
+        background-color: lightgrey;
+        z-index: 0;
+      }
+
       .item {
-        /*background-color: #1eaafc;*/
+        /*background-color: lightgrey;*/
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.19),
           0 6px 6px rgba(0, 0, 0, 0.23);
         color: #ffffff;
@@ -46,6 +59,7 @@
         /*white-space: nowrap;*/
         font-weight: bold;
         padding: 3px;
+        z-index: 1;
         /*text-overflow: ellipsis;
         overflow: hidden;*/
       }
@@ -61,12 +75,13 @@
       }
 
       .time {
-        font-size: 10px;
+        font-size: 1.7vw;
         grid-row-start: 1;
-        background-color: lightgrey;
+        background-color: #f29e4c;
         justify-content: center;
         align-items: top;
         display: grid;
+        z-index: 1;
       }
 
       body {
@@ -81,11 +96,17 @@
     </style>
   </head>
   <body>
+    <div class="page_title"><h1>Thursday</h1></div>
     <div class="schedule">
       {% for i, t in time_list %}
       <div class="time" style="grid-row-start: {{ i }}; grid-column-start: 1;">
         {{ t }}
       </div>
+      {% endfor %} {% for index, time in hour_rows %}
+      <div
+        class="hour"
+        style="grid-row-start: {{ index }}; grid-row-end: span 4; grid-column-start:1; grid-column-end: span 4;"
+      ></div>
       {% endfor %} {% if events %} {% for ev in events %}
       <div
         class="item {{ ev.class }}"
@@ -98,7 +119,7 @@
       {% endfor %}
     </div>
     {% else %}
-    <p>No polls are available.</p>
+    <p>No events are available.</p>
     {% endif %} {{task_df}}
   </body>
 </html>

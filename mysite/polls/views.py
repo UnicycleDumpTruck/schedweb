@@ -226,11 +226,17 @@ def grid(request):
 def vgrid(request):
     template = loader.get_template("polls/vgrid.html")
     time_list = list_of_times(
-        datetime.datetime(2020, 1, 1, 8, 45, 0, 0),
+        datetime.datetime(2020, 1, 1, 9, 0, 0, 0),
         datetime.datetime(2020, 1, 1, 16, 0, 0, 0),
         datetime.timedelta(minutes=15),
     )
-    df = prep_df("Wednesday")
+    hour_rows = [
+        (index, time) for (index, time) in enumerate(time_list, 1) if time[2:] == ":00"
+    ]
+    # for index, time in time_list:
+    #     if time[2:4] == ":00":
+
+    df = prep_df("Thursday")
     df["start_row"] = df.start_date.apply(
         lambda x: time_list.index(x.strftime("%H:%M")) + 1
     )
@@ -239,12 +245,14 @@ def vgrid(request):
     )
     df["row"] = df.task_text.apply(lambda r: task_rows.get(r, 6))
     events = df.to_dict("index").values()
-    print(f"{events=}")
-
+    # print(f"{events=}")
+    print(f"{hour_rows=}")
+    print(f"{time_list=}")
     context = {
         "num_rows": len(time_list),
         # "col_width": (100 / (len(time_list))),
         "events": events,
         "time_list": enumerate(time_list, 1),
+        "hour_rows": hour_rows,
     }
     return HttpResponse(template.render(context, request))
