@@ -2,18 +2,30 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CSS Grid</title>
+    <title>Vertical Grid</title>
     <style>
       .schedule {
         display: grid;
-        grid-template-columns: repeat({{num_columns}}, {{col_width}}%);
-        grid-template-rows: 1em repeat(5, 4em);
+        grid-template-columns: 50px repeat(5, 1fr);
+        grid-template-rows: repeat({{num_rows}}, 5em);
         background-color: grey;
         width: 100%;
       }
 
-      .item {
+      .learn_and_play {
         background-color: #1eaafc;
+      }
+      .spray_and_swap {
+        background-color: #ff13c0;
+      }
+      .prop_swap {
+        background-color: #3cfc1e;
+      }
+      .wipe_down {
+        background-color: #fc981e;
+      }
+      .item {
+        /*background-color: #1eaafc;*/
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
           0 6px 6px rgba(0, 0, 0, 0.23);
         color: #ffffff;
@@ -42,6 +54,9 @@
         font-size: 10px;
         grid-row-start: 1;
         background-color: lightgrey;
+        justify-content: center;
+        align-items: top;
+        display: grid;
       }
 
       body {
@@ -58,11 +73,13 @@
   <body>
     <div class="schedule">
       {% for i, t in time_list %}
-      <div class="time" style="grid-column-start: {{ i }};">{{ t }}</div>
-      {% endfor %} {% if wed_events %} {% for ev in wed_events %}
+      <div class="time" style="grid-row-start: {{ i }}; grid-column-start: 1;">
+        {{ t }}
+      </div>
+      {% endfor %} {% if events %} {% for ev in events %}
       <div
         class="item"
-        style="grid-column: {{ ev.start_col }} / {{ ev.end_col }}; grid-row-start: {{ ev.row }};"
+        style="grid-row: {{ ev.start_row }} / {{ ev.end_row }}; grid-column-start: {{ ev.row }};"
       >
         {{ ev.location }}<br />{{ev.task_text}}
       </div>

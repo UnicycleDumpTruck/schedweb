@@ -172,25 +172,78 @@ def list_of_times(start, end, delta):
 
 def day_of_times():
     return list_of_times(
-        datetime.datetime(2000, 1, 1, 0, 0, 0, 0),
-        datetime.datetime(2000, 1, 1, 23, 59, 59, 0),
+        datetime.datetime(2020, 1, 1, 0, 0, 0, 0),
+        datetime.datetime(2020, 1, 1, 23, 59, 59, 0),
         datetime.timedelta(minutes=15),
     )
+
+
+task_rows = {
+    "Learn & Play": 2,
+    "Disinfect & Prop Swap": 3,
+    "Wipe down": 4,
+    "Prop Swap": 5,
+    "Prop Swap Only": 5,
+}
+
+
+task_classes = {
+    "Learn & Play": "learn_and_play",
+    "Disinfect & Prop Swap": "spray_and_swap",
+    "Wipe down": "wipe_down",
+    "Prop Swap": "prop_swap",
+    "Prop Swap Only": "prop_swap",
+}
 
 
 def grid(request):
     template = loader.get_template("polls/grid.html")
     time_list = list_of_times(
-        datetime.datetime(2000, 1, 1, 8, 45, 0, 0),
-        datetime.datetime(2000, 1, 1, 17, 30, 0, 0),
+        datetime.datetime(2020, 1, 1, 8, 45, 0, 0),
+        datetime.datetime(2020, 1, 1, 16, 0, 0, 0),
         datetime.timedelta(minutes=15),
     )
-    wed_events = prep_df("Wednesday").to_dict("index").values()
-    print(wed_events)
+    wed_df = prep_df("Wednesday")
+    wed_df["start_col"] = wed_df.start_date.apply(
+        lambda x: time_list.index(x.strftime("%H:%M")) + 1
+    )
+    wed_df["end_col"] = wed_df.end_date.apply(
+        lambda x: time_list.index(x.strftime("%H:%M")) + 1
+    )
+    wed_df["row"] = wed_df.task_text.apply(lambda r: task_rows.get(r, 6))
+    wed_events = wed_df.to_dict("index").values()
+
     context = {
         "num_columns": len(time_list),
         "col_width": (100 / (len(time_list))),
         "wed_events": wed_events,
+        "time_list": enumerate(time_list, 1),
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def vgrid(request):
+    template = loader.get_template("polls/vgrid.html")
+    time_list = list_of_times(
+        datetime.datetime(2020, 1, 1, 8, 45, 0, 0),
+        datetime.datetime(2020, 1, 1, 16, 0, 0, 0),
+        datetime.timedelta(minutes=15),
+    )
+    df = prep_df("Wednesday")
+    df["start_row"] = df.start_date.apply(
+        lambda x: time_list.index(x.strftime("%H:%M")) + 1
+    )
+    df["end_row"] = df.end_date.apply(
+        lambda x: time_list.index(x.strftime("%H:%M")) + 1
+    )
+    df["row"] = df.task_text.apply(lambda r: task_rows.get(r, 6))
+    events = df.to_dict("index").values()
+    print(f"{events=}")
+
+    context = {
+        "num_rows": len(time_list),
+        # "col_width": (100 / (len(time_list))),
+        "events": events,
         "time_list": enumerate(time_list, 1),
     }
     return HttpResponse(template.render(context, request))

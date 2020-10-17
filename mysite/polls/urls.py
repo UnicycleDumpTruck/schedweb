@@ -15,4 +15,5 @@ urlpatterns = [
     path("tasks/", views.tasks, name="tasks"),
     # path("wednesday/", views.wed, name="wednesday"),
     path("grid/", views.grid, name="grid"),
+    path("vgrid/", views.vgrid, name="vgrid"),
 ]
