@@ -1,5 +1,7 @@
 import datetime
 
+# from datetime import date, datetime, timedelta
+
 from tablib import Dataset
 from polls.resources import TaskResource
 
@@ -156,11 +158,39 @@ def simple_upload(request):
     return render(request, "core/simple_upload.html")
 
 
+def per_delta(start, end, delta):
+    curr = start
+    while curr < end:
+        yield curr
+        curr += delta
+    # usage: for result in per_delta(datetime.datetime.now(), datetime.datetime.now().replace(hour=19))
+
+
+def list_of_times(start, end, delta):
+    return list(result.strftime("%H:%M") for result in per_delta(start, end, delta))
+
+
+def day_of_times():
+    return list_of_times(
+        datetime.datetime(2000, 1, 1, 0, 0, 0, 0),
+        datetime.datetime(2000, 1, 1, 23, 59, 59, 0),
+        datetime.timedelta(minutes=15),
+    )
+
+
 def grid(request):
     template = loader.get_template("polls/grid.html")
+    time_list = list_of_times(
+        datetime.datetime(2000, 1, 1, 8, 45, 0, 0),
+        datetime.datetime(2000, 1, 1, 17, 30, 0, 0),
+        datetime.timedelta(minutes=15),
+    )
     wed_events = prep_df("Wednesday").to_dict("index").values()
     print(wed_events)
     context = {
+        "num_columns": len(time_list),
+        "col_width": (100 / (len(time_list))),
         "wed_events": wed_events,
+        "time_list": enumerate(time_list, 1),
     }
     return HttpResponse(template.render(context, request))

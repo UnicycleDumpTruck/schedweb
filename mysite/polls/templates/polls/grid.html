@@ -5,18 +5,23 @@
     <title>CSS Grid</title>
   </head>
   <body>
-    {% if wed_events %}
     <div
       class="schedule"
       style="
         display: grid;
-        grid-template-columns: repeat(30, 3.3%);
-        grid-template-rows: repeat(3, 4em);
+        grid-template-columns: repeat({{ num_columns }}, {{ col_width }}%);
+        grid-template-rows: 1em repeat(3, 4em);
         background-color: grey;
         width: 100%;
       "
     >
-      {% for ev in wed_events %}
+      {% for i, t in time_list %}
+      <div
+        style="grid-column-start: {{ i }}; grid-row-start: 1; background-color: #0000ff"
+      >
+        {{ t }}
+      </div>
+      {% endfor %} {% if wed_events %} {% for ev in wed_events %}
       <div
         style="grid-column: 2 / 4; grid-row: 2 / 3; background-color: #0000ff"
       >
