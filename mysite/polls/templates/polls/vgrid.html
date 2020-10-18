@@ -7,8 +7,12 @@
       .page_title {
         color: #f29e4c;
         font-size: 60px;
+        font-weight: bold;
+        display:block;
         justify-content: center;
-        align-items: center;
+        align-items: top;
+        width: 100%;
+        height: 100px;
       }
 
       .schedule {
@@ -21,47 +25,65 @@
       }
 
       .learn_and_play {
-        background-color: #772d8b;
-        font-size: 3.5vh;
+        background-color: #dda3ec;
+        font-size: 18px;
       }
       .spray_and_swap {
-        background-color: #d138bf;
-        font-size: 2.5vw;
+        background-color: #fa98a4;
+        font-size: 18px;
       }
       .prop_swap {
-        background-color: #35ff69;
-        font-size: 1.3vh;
+        background-color: #a6cf9f;
+        /*color: black;*/
+        font-size: 14px;
       }
       .wipe_down {
-        background-color: #7494ea;
-        font-size: 2.2vh;
+        background-color: #a3b5e6;
+        font-size: 14px;
       }
       .unknown {
         background-color: #ff0000;
-        font-size: 2.5vh;
+        font-size: 14px;
       }
 
       .hour {
-        background-color: lightgrey;
+        background-color: rgb(186, 186, 186);
         z-index: 0;
+      }
+
+      .img_container {
+        /*justify-content: right;
+        align-items: bottom;*/
+        grid-row-start: 2;
+        grid-column-start 2;
+        /*background-color: mediumaquamarine;*/
+      }
+
+      .text_container {
+        align-items: top;
+        justify-content: left;
+        display: block;
+        grid-area: 1 / 1 / 4 / 4;
+        /*background-color: lightyellow;*/
       }
 
       .item {
         /*background-color: lightgrey;*/
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.19),
           0 6px 6px rgba(0, 0, 0, 0.23);
-        color: #ffffff;
+        color: black;
         border-radius: 4px;
-        border: 2px solid #171717;
-        display: block;
+        border: 3px solid white;
+        display: grid;
+        row-gap: 0px;
+        column-gap: 0px;
+        grid-template-columns: 1fr 50px;
+        grid-template-rows: 1fr 50px;
         justify-content: center;
-        align-items: center;
-        /*white-space: nowrap;*/
+        align-items: top;
         font-weight: bold;
         padding: 3px;
         z-index: 1;
-        /*text-overflow: ellipsis;
-        overflow: hidden;*/
       }
 
       .event_location {
@@ -75,13 +97,20 @@
       }
 
       .time {
-        font-size: 1.7vw;
+        font-size: 14px;
         grid-row-start: 1;
         background-color: #f29e4c;
         justify-content: center;
         align-items: top;
         display: grid;
         z-index: 1;
+      }
+
+      .task_icon {
+        width: 30px;
+        position: relative;
+        bottom: 0px;
+        right: 0px;
       }
 
       body {
@@ -96,7 +125,7 @@
     </style>
   </head>
   <body>
-    <div class="page_title"><h1>Thursday</h1></div>
+    <div class="page_title">Thursday</div>
     <div class="schedule">
       {% for i, t in time_list %}
       <div class="time" style="grid-row-start: {{ i }}; grid-column-start: 1;">
@@ -110,11 +139,23 @@
       {% endfor %} {% if events %} {% for ev in events %}
       <div
         class="item {{ ev.class }}"
-        style="grid-row: {{ ev.start_row }} / {{ ev.end_row }}; grid-column-start: {{ ev.row }};"
+        style="grid-row: {{ ev.start_row }} / {{ ev.end_row }}; grid-column-start: {{ ev.row }}; {% ifequal ev.task_text "Prop Swap Only" %} grid-column-end: span 2; {% endifequal %}"
       >
-        <span class="event_location">{{ ev.location }}:</span><br />
-        <span class="event_task">{{ev.task_text}}</span><br />
-        <span class="event_time">{{ev.start_string}} to {{ev.end_string}}</span>
+        <div class="text_container">
+          <span class="event_time"
+            >{{ev.start_string}} to {{ev.end_string}}</span
+          >
+          {% ifnotequal ev.task_text "Prop Swap Only" %}
+          <br />
+          {% endifnotequal %}
+          <span class="event_location">{{ ev.location }}:</span><br />
+          <span class="event_task">{{ev.task_text}}</span>
+        </div>
+        <div class="img_container">
+          {% for src in ev.icons %}
+          <img class="task_icon" src="/static/{{ src }}" alt="{{ src }}" />
+          {% endfor %}
+        </div>
       </div>
       {% endfor %}
     </div>

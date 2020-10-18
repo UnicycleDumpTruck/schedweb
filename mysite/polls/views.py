@@ -78,6 +78,7 @@ def prep_df(day_of_week):
         + df["task_text"].replace("Disinfect & Prop Swap", "Disinfect<br>& Prop Swap")
     )
     df["class"] = df.task_text.apply(lambda r: task_classes.get(r, "unknown"))
+    df["icons"] = df.task_text.apply(lambda r: icons.get(r))
     return df
 
 
@@ -197,6 +198,28 @@ task_classes = {
 }
 
 
+icons = {
+    "Learn & Play": ("close.png", "learn.png"),
+    "Disinfect & Prop Swap": (
+        "close.png",
+        "swap.png",
+        "spray.png",
+    ),
+    "Wipe down": (
+        "open.png",
+        "wipe.png",
+    ),
+    "Prop Swap": (
+        "open.png",
+        "swap.png",
+    ),
+    "Prop Swap Only": (
+        "open.png",
+        "swap.png",
+    ),
+}
+
+
 def grid(request):
     template = loader.get_template("polls/grid.html")
     time_list = list_of_times(
@@ -212,6 +235,7 @@ def grid(request):
         lambda x: time_list.index(x.strftime("%H:%M")) + 1
     )
     wed_df["row"] = wed_df.task_text.apply(lambda r: task_rows.get(r, 6))
+
     wed_events = wed_df.to_dict("index").values()
 
     context = {
