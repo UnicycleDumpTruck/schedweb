@@ -54,13 +54,13 @@ def prep_df(day_of_week):
         "start_time",
         "end_time",
         "task_text",
-        "task_type",
-        "task_type__chart_color",
-        "task_type__short_name",
-        "task_type__long_name",
+        # "task_type",
+        # "task_type__chart_color",
+        # "task_type__short_name",
+        # "task_type__long_name",
         "weekday",
-        "exhibit",
-        "exhibit__long_name",
+        # "exhibit",
+        # "exhibit__long_name",
     )
 
     df = pd.DataFrame.from_records(q)

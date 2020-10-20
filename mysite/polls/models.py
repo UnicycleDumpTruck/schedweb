@@ -61,14 +61,14 @@ class Task(models.Model):
         ("Saturday", "Saturday"),
         ("Sunday", "Sunday"),
     ]
-    task_type = models.ForeignKey(
-        Task_Type, on_delete=models.CASCADE, null=True, blank=True
-    )
+    # task_type = models.ForeignKey(
+    #     Task_Type, on_delete=models.CASCADE, null=True, blank=True
+    # )
     task_text = models.CharField(max_length=100, null=True, blank=True)
     location = models.CharField(max_length=100, null=True, blank=True)
-    exhibit = models.ForeignKey(
-        Exhibit, on_delete=models.CASCADE, null=True, blank=True
-    )
+    # exhibit = models.ForeignKey(
+    #     Exhibit, on_delete=models.CASCADE, null=True, blank=True
+    # )
     start_time = models.TimeField()
     end_time = models.TimeField()
     weekday = models.CharField(max_length=10, choices=days, default="Monday")

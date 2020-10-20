@@ -18,7 +18,7 @@
       .schedule {
         display: grid; /* was grid */
         grid-template-columns: 40px repeat(3, 1fr);
-        grid-template-rows: repeat({{num_rows}}, 3em);
+        grid-template-rows: repeat({{num_rows}}, 2.3em);
         grid-gap: 5px;
         background-color: grey;
         width: 100%;
@@ -74,6 +74,7 @@
         justify-content: left;
         display: block;
         grid-column-start: 1;
+        grid-column-end: 4;
         grid-row-start: 1;
         /*grid-area: 1 / 1 / 2 / 3;*/
         /*background-color: lightyellow;*/
@@ -120,12 +121,12 @@
       }
 
       .task_icon {
-        width: 30px;
+        width: 25px;
         /*position: relative;
         bottom: 0px;
         right: 0px;*/
-        margin-top: 5px;
-        margin-bottom: 5px;
+        margin-top: 0px;
+        margin-bottom: 0px;
         margin-right: 0px;
         grid-column-end: 5;
       }
@@ -165,12 +166,18 @@
           {% ifnotequal ev.task_text "Prop Swap Only" %}
           <br />
           {% endifnotequal %}
-          <span class="event_location">{{ ev.location }}:</span><br />
+          <span class="event_location">{{ ev.location }}:</span>
+          {% ifnotequal ev.task_text "Prop Swap Only" %}
+            <br />
+          {% endifnotequal %}
           <span class="event_task">{{ev.task_text}}</span>
         </div>
-        <div class="img_container" style="{% ifequal ev.task_text "Prop Swap Only" %} grid-column-start: 4; {% else %} grid-column-start: 3; {% endifequal %}">
+        <div class="img_container" style="{% ifequal ev.task_text "Prop Swap Only" %} grid-column-start: 4; {% else %} grid-column-start: 4; {% endifequal %}">
           {% for src in ev.icons %}
           <img class="task_icon" src="/static/{{ src }}" alt="{{ src }}" />
+        {% ifnotequal ev.task_text "Prop Swap Only" %}
+        <br />
+        {% endifnotequal %}
           {% endfor %}
         </div>
       </div>
