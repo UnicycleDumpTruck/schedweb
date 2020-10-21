@@ -64,6 +64,7 @@ def prep_df(day_of_week):
     )
 
     df = pd.DataFrame.from_records(q)
+    print(df)
     df["start_date"] = df.start_time.apply(time_to_date)
     df["end_date"] = df.end_time.apply(time_to_date)
     df["start_string"] = df.start_time.apply(lambda x: x.strftime("%H:%M"))
@@ -268,10 +269,10 @@ def vgrid(request):
         lambda x: time_list.index(x.strftime("%H:%M")) + 1
     )
     df["row"] = df.task_text.apply(lambda r: task_rows.get(r, 6))
-    events = df.to_dict("index").values()
-    # print(f"{events=}")
-    print(f"{hour_rows=}")
-    print(f"{time_list=}")
+    #events = list(df.to_dict("index").values())
+    print(f"{events[0]=}")
+    #print(f"{hour_rows=}")
+    #print(f"{time_list=}")
     context = {
         "num_rows": len(time_list),
         # "col_width": (100 / (len(time_list))),
